@@ -4,3 +4,5 @@ jupyterlab~=4.0.1
 
 # Python kernel (optional)
 jupyterlite-pyodide-kernel==0.0.8
+
+nxviz
