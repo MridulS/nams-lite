@@ -54,31 +54,6 @@ def load_facebook_network():
     return G
 
 
-def load_sociopatterns_network():
-    # Read the edge list
-
-    df = pd.read_csv(
-        datasets / "sociopatterns-infectious/out.sociopatterns-infectious",
-        sep=" ",
-        skiprows=2,
-        header=None,
-    )
-    df = df[[0, 1, 2]]
-    df.columns = ["person1", "person2", "weight"]
-
-    G = nx.Graph()
-    for row in df.iterrows():
-        p1 = row[1]["person1"]
-        p2 = row[1]["person2"]
-        if G.has_edge(p1, p2):
-            G.edges[p1, p2]["weight"] += 1
-        else:
-            G.add_edge(p1, p2, weight=1)
-
-    for n in sorted(G.nodes()):
-        G.nodes[n]["order"] = float(n)
-
-    return G
 
 
 def load_physicians_network():
