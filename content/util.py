@@ -58,3 +58,22 @@ def load_sociopatterns_network():
         G.nodes[n]["order"] = float(n)
 
     return G
+
+
+def load_physicians_network():
+    # Read the edge list
+
+    df = pd.read_csv(
+        "data/out.moreno_innovation_innovation",
+        sep=" ",
+        skiprows=2,
+        header=None,
+    )
+    df = df[[0, 1]]
+    df.columns = ["doctor1", "doctor2"]
+
+    G = nx.Graph()
+    for row in df.iterrows():
+        G.add_edge(row[1]["doctor1"], row[1]["doctor2"])
+
+    return G
