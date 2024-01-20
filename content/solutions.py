@@ -7,7 +7,7 @@ def node_metadata(G):
     """Counts of students of each gender."""
     from collections import Counter
 
-    mf_counts = Counter([d["gender"] for n, d in G.nodes(data=True)])
+    mf_counts = Counter([d["country"] for n, d in G.nodes(data=True)])
     return mf_counts
 
 
