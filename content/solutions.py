@@ -324,3 +324,56 @@ def label_connected_component_subgraphs(G):
 def plot_cc_subgraph(G):
     """Plot all connected component subgraphs."""
     c = circos(G, node_color_by="subgraph", group_by="subgraph")
+
+
+def bfs_algorithm():
+    """
+    How to design a BFS algorithm.
+    """
+    ans = """
+How does the breadth-first search work?
+It essentially is as follows:
+
+1. Begin with a queue that has only one element in it: the starting node.
+2. Add the neighbors of that node to the queue.
+    1. If destination node is present in the queue, end.
+    2. If destination node is not present, proceed.
+3. For each node in the queue:
+    1. Remove node from the queue.
+    2. Add neighbors of the node to the queue. Check if destination node is present or not.
+    3. If destination node is present, end. <!--Credit: @cavaunpeu for finding bug in pseudocode.-->
+    4. If destination node is not present, continue.
+"""
+    print(ans)
+
+from nxviz import annotate, highlights
+
+
+def plot_path_with_neighbors(G, n1, n2):
+    """Plot a path with the heighbors of of the nodes along that path."""
+    path = nx.shortest_path(G, n1, n2)
+    nodes = [*path]
+    for node in path:
+        nodes.extend(list(G.neighbors(node)))
+    nodes = list(set(nodes))
+
+    g = G.subgraph(nodes)
+    nv.arc(
+        g, sort_by="order", node_color_by="order", edge_enc_kwargs={"alpha_scale": 0.5}
+    )
+    for n in path:
+        highlights.arc_node(g, n, sort_by="order")
+    for n1, n2 in zip(path[:-1], path[1:]):
+        highlights.arc_edge(g, n1, n2, sort_by="order")
+
+
+def plot_degree_betweenness(G):
+    """Plot scatterplot between degree and betweenness centrality."""
+    bc = pd.Series(nx.betweenness_centrality(G))
+    dc = pd.Series(nx.degree_centrality(G))
+
+    df = pd.DataFrame(dict(bc=bc, dc=dc))
+    ax = df.plot(x="dc", y="bc", kind="scatter")
+    ax.set_ylabel("Betweenness\nCentrality")
+    ax.set_xlabel("Degree Centrality")
+    sns.despine()
