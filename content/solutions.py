@@ -1,6 +1,10 @@
-"""
-Solutions to Intro Chapter.
-"""
+import matplotlib.pyplot as plt
+import networkx as nx
+import pandas as pd
+import nxviz as nv
+from nxviz import annotate, highlights, circos
+import numpy as np
+from itertools import combinations
 
 
 def node_metadata(G):
@@ -54,18 +58,12 @@ def unrequitted_friendships_v3(G):
     return len(list(set(links) - set(reverse_links)))
 
 
-
 """Solutions to Hubs chapter."""
 
-import matplotlib.pyplot as plt
-import networkx as nx
-import pandas as pd
-import nxviz as nv
-from nxviz import annotate
-import numpy as np
 
 def ecdf(data):
     return np.sort(data), np.arange(1, len(data) + 1) / len(data)
+
 
 def rank_ordered_neighbors(G):
     """
@@ -129,9 +127,10 @@ def circos_plot(G):
     # c.draw()
     nv.circos(G, sort_by="order", node_color_by="order")
     annotate.node_colormapping(G, color_by="order")
+    
 
 
-def visual_insights():
+def visual_insights_hubs():
     """Visual insights from the Circos Plot."""
     return """
 We see that most edges are "local" with nodes
@@ -148,10 +147,6 @@ are also the ones that have edges that cross the circos plot.
 
 def dc_node_order(G):
     """Comparison of degree centrality by maximum difference in node order."""
-    import matplotlib.pyplot as plt
-    import pandas as pd
-    import networkx as nx
-
     # Degree centralities
     dcs = pd.Series(nx.degree_centrality(G))
 
@@ -164,17 +159,9 @@ def dc_node_order(G):
         maxdiffs[n] = max(diffs)
     maxdiffs = pd.Series(maxdiffs)
 
-    ax = pd.DataFrame(dict(degree_centrality=dcs, max_diff=maxdiffs)).plot(
+    return pd.DataFrame(dict(degree_centrality=dcs, max_diff=maxdiffs)).plot(
         x="degree_centrality", y="max_diff", kind="scatter"
     )
-
-    
-"""Solutions to Structures chapter."""
-
-from itertools import combinations
-
-import networkx as nx
-from nxviz import circos
 
 
 def triangle_finding_strategies():
@@ -323,7 +310,7 @@ def label_connected_component_subgraphs(G):
 
 def plot_cc_subgraph(G):
     """Plot all connected component subgraphs."""
-    c = circos(G, node_color_by="subgraph", group_by="subgraph")
+    return circos(G, node_color_by="subgraph", group_by="subgraph")
 
 
 def bfs_algorithm():
@@ -345,8 +332,6 @@ It essentially is as follows:
     4. If destination node is not present, continue.
 """
     print(ans)
-
-from nxviz import annotate, highlights
 
 
 def plot_path_with_neighbors(G, n1, n2):
@@ -376,4 +361,3 @@ def plot_degree_betweenness(G):
     ax = df.plot(x="dc", y="bc", kind="scatter")
     ax.set_ylabel("Betweenness\nCentrality")
     ax.set_xlabel("Degree Centrality")
-    sns.despine()
